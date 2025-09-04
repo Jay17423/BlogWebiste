@@ -1,6 +1,5 @@
-from datetime import datetime
-from typing import Optional
 from sqlmodel import SQLModel
+
 
 
 class UserBase(SQLModel):
@@ -12,7 +11,7 @@ class UserCreate(UserBase):
 
 
 class UserRead(UserBase):
-    pass
+    id:int
     
 class UserLogin(UserBase):
     password: str
