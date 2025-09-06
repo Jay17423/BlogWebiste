@@ -16,9 +16,9 @@ class PostCreate(PostBase):
     image_url: str
 
 class PostUpdate(BaseModel):
-    title: str
-    content: str
-    image_url: str
+    title: Optional[str] = None
+    content: Optional[str] = None
+    image_url: Optional[str] = None
 
 class PostRead(BaseModel):
     id: int
