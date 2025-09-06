@@ -15,3 +15,8 @@ class UserRead(UserBase):
     
 class UserLogin(UserBase):
     password: str
+
+class TokenResponse(UserBase):
+    access_token: str
+    token_type: str
+    id: int

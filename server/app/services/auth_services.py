@@ -17,19 +17,27 @@ def signup_user(session:Session, username:str,password:str) -> User:
     user = User(username=username,hashed_password=hash_password(password))
     return create_user(session,user=user)
 
-def login_user(session:Session,username:str,password:str) :
-    user = session.exec(select(User).where(User.username==username)).first()
-    if not user or not verify_password(password,user.hashed_password):
+def login_user(session: Session, username: str, password: str):
+    user = session.exec(select(User).where(User.username == username)).first()
+    if not user or not verify_password(password, user.hashed_password):
         raise HTTPException(
-            status_code= status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password"
         )
+
     token_data = {
-        "sub": str(user.id),        
-        "username": user.username,  
+        "sub": str(user.id),
+        "username": user.username,
     }
     token = create_access_token(token_data)
-    return {"access_token": token, "token_type": "bearer"}
+
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "username": user.username,
+        "id": user.id,
+    }
+
 
 
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
