@@ -26,7 +26,7 @@ export default function Signup() {
       navigate("/login");
     } catch (err) {
       console.error("Signup Error:", err.response?.data || err.message);
-      alert("Signup failed ❌");
+      alert(err.response?.data?.detail|| "Signup failed ❌");
     }
   };
 

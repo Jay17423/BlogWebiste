@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -10,6 +10,7 @@ export default function Login() {
     password: "",
   });
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -35,6 +36,7 @@ export default function Login() {
     );
 
     alert(res.data.message || "Login successful ✅");
+    navigate("/feed")
   } catch (err) {
     console.error("Login Error:", err.response?.data || err.message);
 
