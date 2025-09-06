@@ -24,7 +24,11 @@ def login_user(session:Session,username:str,password:str) :
             status_code= status.HTTP_401_UNAUTHORIZED,
             detail="Invalid username or password"
         )
-    token = create_access_token({"sub":user.username})
+    token_data = {
+        "sub": str(user.id),        
+        "username": user.username,  
+    }
+    token = create_access_token(token_data)
     return {"access_token": token, "token_type": "bearer"}
 
 
@@ -32,4 +36,10 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})
+    if "sub" not in to_encode:
+        to_encode["sub"] = str(data.get("id"))   # user id
+    if "username" not in to_encode:
+        to_encode["username"] = data.get("username")
+
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+

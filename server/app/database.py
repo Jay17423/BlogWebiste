@@ -2,6 +2,7 @@ from sqlmodel import SQLModel,create_engine,Session
 from typing import Optional
 from app.config import settings
 from app.models.user import User
+from app.models.post import Post
 
 engine = create_engine(settings.DATABASE_URL, echo=True)
 
