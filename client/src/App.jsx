@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -19,10 +19,14 @@ import MyBlog from "./components/MyBlog";
 function AppWrapper() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const token = Cookies.get("token");
-    if (!token) return;
+    if (!token) {
+      setLoading(false); 
+      return;
+    }
 
     axios
       .get("http://127.0.0.1:8000/api/v1/auth/me", {
@@ -43,8 +47,14 @@ function AppWrapper() {
         Cookies.remove("token");
         dispatch(removeUser());
         navigate("/login");
-      });
+      })
+      .finally(() => setLoading(false));
   }, [dispatch, navigate]);
+
+  if (loading) {
+
+    return <div className="text-center mt-20 text-xl">Loading...</div>;
+  }
 
   return (
     <Routes>
