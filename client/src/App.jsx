@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  useNavigate,
+  Navigate,
 } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -15,20 +15,22 @@ import PrivateRoute from "./routes/PrivateRoute";
 import Homepage from "./components/Homepage";
 import { addUser, removeUser } from "./utils/userSlice";
 import MyBlog from "./components/MyBlog";
+import CreateBlog from "./components/CreateBlog";
 
 function AppWrapper() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const token = Cookies.get("token");
-    if (!token) return;
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
     axios
       .get("http://127.0.0.1:8000/api/v1/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => {
         dispatch(
@@ -42,9 +44,11 @@ function AppWrapper() {
       .catch(() => {
         Cookies.remove("token");
         dispatch(removeUser());
-        navigate("/login");
-      });
-  }, [dispatch, navigate]);
+      })
+      .finally(() => setLoading(false)); 
+  }, [dispatch]);
+
+  if (loading) return <p>Loading...</p>; 
 
   return (
     <Routes>
@@ -66,6 +70,15 @@ function AppWrapper() {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/create-post"
+        element={
+          <PrivateRoute>
+            <CreateBlog />
+          </PrivateRoute>
+        }
+      />
+
     </Routes>
   );
 }

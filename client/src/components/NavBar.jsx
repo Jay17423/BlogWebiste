@@ -38,7 +38,10 @@ const NavBar = () => {
           >
             My Blogs
           </li>
-          <li className="hover:text-orange-200 cursor-pointer transition duration-200">
+          <li className="hover:text-orange-200 cursor-pointer transition duration-200"
+          onClick={()=>navigate("/create-post")}
+          
+          >
             Create Blog
           </li>
         </ul>
