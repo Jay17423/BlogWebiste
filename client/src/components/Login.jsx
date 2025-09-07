@@ -3,6 +3,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -34,7 +35,7 @@ export default function Login() {
         id: res.data.id,
       })
     );
-
+    Cookies.set("token", res.data.access_token, { expires: 1 });
     alert(res.data.message || "Login successful ✅");
     navigate("/feed")
   } catch (err) {

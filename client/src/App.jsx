@@ -1,24 +1,81 @@
-import React from "react"
-import { BrowserRouter as Router,Routes,Route } from "react-router-dom"
-import Login from "./components/Login"
-import Signup from "./components/Signup"
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import Cookies from "js-cookie";
 
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import PrivateRoute from "./routes/PrivateRoute";
+import Homepage from "./components/Homepage";
+import { addUser, removeUser } from "./utils/userSlice";
+import MyBlog from "./components/MyBlog";
 
-function App() {
+function AppWrapper() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = Cookies.get("token");
+    if (!token) return;
+
+    axios
+      .get("http://127.0.0.1:8000/api/v1/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) => {
+        dispatch(
+          addUser({
+            username: res.data.username,
+            id: res.data.id,
+            token: token,
+          })
+        );
+      })
+      .catch(() => {
+        Cookies.remove("token");
+        dispatch(removeUser());
+        navigate("/login");
+      });
+  }, [dispatch, navigate]);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Signup></Signup>}/>
-        <Route path="/login" element={<Login></Login>}/>
-
-      </Routes>
-    </Router>
-
-    
-    
-  )
+    <Routes>
+      <Route path="/" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/feed"
+        element={
+          <PrivateRoute>
+            <Homepage />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/my-blog"
+        element={
+          <PrivateRoute>
+            <MyBlog />
+          </PrivateRoute>
+        }
+      />
+    </Routes>
+  );
 }
 
-export default App
+function App() {
+  return (
+    <Router>
+      <AppWrapper />
+    </Router>
+  );
+}
+
+export default App;
