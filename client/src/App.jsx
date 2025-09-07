@@ -16,6 +16,7 @@ import Homepage from "./components/Homepage";
 import { addUser, removeUser } from "./utils/userSlice";
 import MyBlog from "./components/MyBlog";
 import UpdateBlog from "./components/UpdateBlog";
+import CreatePost from "./components/CreatePost";
 
 function AppWrapper() {
   const dispatch = useDispatch();
@@ -82,6 +83,14 @@ function AppWrapper() {
         element={
           <PrivateRoute>
             <UpdateBlog />
+          </PrivateRoute>
+        }
+      />
+       <Route
+        path="/create-post"
+        element={
+          <PrivateRoute>
+            <CreatePost />
           </PrivateRoute>
         }
       />

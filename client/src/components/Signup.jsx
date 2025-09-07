@@ -40,7 +40,6 @@ export default function Signup() {
           Sign Up 📝
         </h2>
 
-        {/* Username */}
         <div className="mb-5">
           <label className="block text-gray-700 font-medium mb-2">
             Username
@@ -55,7 +54,6 @@ export default function Signup() {
           />
         </div>
 
-        {/* Password */}
         <div className="mb-6">
           <label className="block text-gray-700 font-medium mb-2">
             Password
@@ -70,7 +68,7 @@ export default function Signup() {
           />
         </div>
 
-        {/* Submit */}
+       
         <button
           type="submit"
           className="w-full bg-orange-500 text-white py-2 rounded-lg font-semibold hover:bg-orange-600 transition"
