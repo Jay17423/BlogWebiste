@@ -19,12 +19,12 @@ import MyBlog from "./components/MyBlog";
 function AppWrapper() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true); 
+  const [loading, setLoading] = useState(true); // new state variable
 
   useEffect(() => {
     const token = Cookies.get("token");
     if (!token) {
-      setLoading(false); 
+      setLoading(false); // no token, stop loading
       return;
     }
 
@@ -48,11 +48,11 @@ function AppWrapper() {
         dispatch(removeUser());
         navigate("/login");
       })
-      .finally(() => setLoading(false));
+      .finally(() => setLoading(false)); // stop loading once request finishes
   }, [dispatch, navigate]);
 
   if (loading) {
-
+    // show a loader while checking authentication
     return <div className="text-center mt-20 text-xl">Loading...</div>;
   }
 

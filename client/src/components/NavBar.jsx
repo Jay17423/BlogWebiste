@@ -38,12 +38,14 @@ const NavBar = () => {
           >
             My Blogs
           </li>
-          <li className="hover:text-orange-200 cursor-pointer transition duration-200">
+          <li className="hover:text-orange-200 cursor-pointer transition duration-200"
+          onClick={()=>navigate("/create-post")}
+          
+          >
             Create Blog
           </li>
         </ul>
 
-        {/* Username + Logout */}
         <div className="flex items-center space-x-4">
           <span className="text-white font-semibold">{username}</span>
           <button
