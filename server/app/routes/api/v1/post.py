@@ -1,6 +1,8 @@
+from fastapi import Form, File, UploadFile
 
 
 from fastapi import APIRouter, Depends, Form, File, HTTPException, UploadFile
+from app.services.cloudinary_service import upload_image
 from sqlalchemy import Select
 from sqlmodel import Session, select,desc
 from app.database import get_session  # Assuming you have this
@@ -44,10 +46,13 @@ async def get_my_posts(
     return posts
 
 
+
 @router.patch("/{id}", response_model=PostRead)
-def partial_update_post(
+async def partial_update_post(
     id: int,
-    post: PostUpdate,
+    title: str = Form(None),
+    content: str = Form(None),
+    image: UploadFile | None = File(None),
     session: Session = Depends(get_session),
     current_user: dict = Depends(get_current_user),
 ):
@@ -59,17 +64,19 @@ def partial_update_post(
     if db_post.user_id != current_user["id"]:
         raise HTTPException(status_code=403, detail="Not allowed to update this post")
 
-    if post.title is not None:
-        db_post.title = post.title
-    if post.content is not None:
-        db_post.content = post.content
-    if post.image_url is not None:
-        db_post.image_url = post.image_url
+    if title is not None:
+        db_post.title = title
+    if content is not None:
+        db_post.content = content
+    if image is not None:
+        upload_result = upload_image(image)  
+        db_post.image_url = upload_result
 
     session.add(db_post)
     session.commit()
     session.refresh(db_post)
     return db_post
+
 
 
 @router.delete("/{id}")

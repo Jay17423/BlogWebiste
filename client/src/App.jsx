@@ -15,6 +15,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import Homepage from "./components/Homepage";
 import { addUser, removeUser } from "./utils/userSlice";
 import MyBlog from "./components/MyBlog";
+import UpdateBlog from "./components/UpdateBlog";
 
 function AppWrapper() {
   const dispatch = useDispatch();
@@ -76,7 +77,16 @@ function AppWrapper() {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/update/:id"
+        element={
+          <PrivateRoute>
+            <UpdateBlog />
+          </PrivateRoute>
+        }
+      />
     </Routes>
+    
   );
 }
 

@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function MyBlogList({ post, onPostDeleted }) {
   const token = useSelector((state) => state.user.token);
+  const navigate = useNavigate()
   const [showFullContent, setShowFullContent] = useState(false);
 
   const onDelete = async (id) => {
@@ -61,7 +63,9 @@ export default function MyBlogList({ post, onPostDeleted }) {
         </div>
 
         <div className="flex gap-3">
-          <button className="flex-1 bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition">
+          <button className="flex-1 bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition"
+          onClick={() => navigate(`/update/${post.id}`, { state: post })}
+          >
             Update
           </button>
           <button
