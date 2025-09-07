@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import MyBlogList from "./MyBlogList"
+import MyBlogList from "./MyBlogList";
 
 const MyBlog = () => {
   const token = useSelector((state) => state.user.token);
   const [posts, setPosts] = useState([]);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const res = await axios.get(
-          " http://127.0.0.1:8000/api/v1/posts/my-posts",
+          "http://127.0.0.1:8000/api/v1/posts/my-posts",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -23,17 +24,27 @@ const MyBlog = () => {
         console.log("Error fetching posts:", err);
       }
     };
+
     if (token) {
       fetchPosts();
     }
   }, [token]);
 
+
+  const handlePostDeleted = (deletedId) => {
+    setPosts((prev) => prev.filter((p) => p.id !== deletedId));
+  };
+
   return (
     <div>
-      <NavBar></NavBar>
+      <NavBar />
       <div className="py-10 bg-gray-50 min-h-screen">
-        {posts.map((post) =>(
-            <MyBlogList key={post.id} post={post}></MyBlogList>
+        {posts.map((post) => (
+          <MyBlogList
+            key={post.id}
+            post={post}
+            onPostDeleted={handlePostDeleted} 
+          />
         ))}
       </div>
     </div>

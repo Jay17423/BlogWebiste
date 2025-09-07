@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
-export default function FeedCard({ post }) {
+export default function MyBlogList({ post, onPostDeleted }) {
   const token = useSelector((state) => state.user.token);
   const [showFullContent, setShowFullContent] = useState(false);
 
@@ -16,7 +16,7 @@ export default function FeedCard({ post }) {
         },
       });
       alert("Post deleted successfully ✅");
-      // if (onPostDeleted) onPostDeleted(id);
+      if (onPostDeleted) onPostDeleted(id);
     } catch (err) {
       console.error("Error deleting post:", err.response?.data || err.message);
       alert("Failed to delete post ❌");
@@ -39,7 +39,11 @@ export default function FeedCard({ post }) {
         </h2>
 
         <p className="text-gray-700 mb-2">
-          {showFullContent ? post.content : `${post.content.slice(0, 150)}${post.content.length > 150 ? "..." : ""}`}
+          {showFullContent
+            ? post.content
+            : `${post.content.slice(0, 150)}${
+                post.content.length > 150 ? "..." : ""
+              }`}
         </p>
 
         {post.content.length > 150 && (
@@ -57,9 +61,7 @@ export default function FeedCard({ post }) {
         </div>
 
         <div className="flex gap-3">
-          <button
-            className="flex-1 bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition"
-          >
+          <button className="flex-1 bg-blue-500 text-white py-2 rounded-lg font-semibold hover:bg-blue-600 transition">
             Update
           </button>
           <button

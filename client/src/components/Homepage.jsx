@@ -28,12 +28,14 @@ const Homepage = () => {
     }
   }, [token]);
 
+
+
   return (
     <div>
       <NavBar></NavBar>
       <div className="py-10 bg-gray-50 min-h-screen">
         {posts.map((post) => (
-          <FeedCard key={post.id} post={post} />
+          <FeedCard key={post.id} post={post}  />
         ))}
       </div>
     </div>
