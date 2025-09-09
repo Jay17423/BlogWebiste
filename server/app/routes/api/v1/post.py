@@ -3,7 +3,6 @@ from fastapi import Form, File, UploadFile
 
 from fastapi import APIRouter, Depends, Form, File, HTTPException, UploadFile
 from app.services.cloudinary_service import upload_image
-from sqlalchemy import Select
 from sqlmodel import Session, select,desc
 from app.database import get_session  # Assuming you have this
 from app.dependencies import get_current_user
