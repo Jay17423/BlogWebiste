@@ -9,6 +9,7 @@ from app.dependencies import get_current_user
 from app.models.post import Post
 from app.schema.post import PostRead, PostUpdate
 from app.services.post_services import create_post_with_image
+from sqlalchemy import or_
 
 router = APIRouter(prefix="/posts", tags=["Posts"])
 
@@ -37,12 +38,7 @@ async def get_my_posts(
 ):
     statement = select(Post).where(Post.user_id == current_user["id"])
     result = session.exec(statement).all()
-
-    posts = (
-        [p for (p,) in result] if result and isinstance(result[0], tuple) else result
-    )
-
-    return posts
+    return result
 
 
 
@@ -102,14 +98,9 @@ def get_app_post(
 ):
     statement = select(Post).where(Post.user_id != current_user["id"]).order_by(Post.created_at.desc())
     result = session.exec(statement).all()
+    return result
 
-    posts = (
-        [p for (p,) in result] if result and isinstance(result[0], tuple) else result
-    )
 
-    return posts
-
-from sqlalchemy import or_
 
 @router.get("/filter-post", response_model=list[PostRead])
 async def filter_all_post(
