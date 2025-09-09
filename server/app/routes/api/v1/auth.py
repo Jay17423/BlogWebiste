@@ -17,13 +17,6 @@ def signup(user: UserCreate, session: Session = Depends(get_session)):
 def user_login(user: UserLogin, session: Session = Depends(get_session), response: Response = None):
     login_data = login_user(session, user.username, user.password)
    
-    response.set_cookie(
-        key="access_token",
-        value=login_data["access_token"],
-        httponly=True,  
-        secure=False,    
-        samesite="lax"
-    )
     
     return login_data
 
